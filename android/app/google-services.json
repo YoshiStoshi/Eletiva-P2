@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "576905925053",
+    "project_id": "eletiva-p2-5321a",
+    "storage_bucket": "eletiva-p2-5321a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576905925053:android:f1d3526bff80ab89bec2d4",
+        "android_client_info": {
+          "package_name": "com.example.powerfb"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHKd0Wk0UXc_PQgkPiGxdMj_54EV2zy3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576905925053:android:0dd879984fbf1b01bec2d4",
+        "android_client_info": {
+          "package_name": "com.example.powerhouse"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHKd0Wk0UXc_PQgkPiGxdMj_54EV2zy3Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

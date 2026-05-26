@@ -1,0 +1,38 @@
+name: power_house_flutter
+description: Power House GYM — Aplicativo Flutter com Firebase (Projeto Prático)
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Firebase
+  firebase_core: ^4.9.0
+  firebase_auth: ^6.5.1
+  cloud_firestore: ^6.4.1
+
+  # State management
+  provider: ^6.1.5+1
+
+  # HTTP para API REST (RF007)
+  http: ^1.4.0
+
+  # Utilitários
+  intl: ^0.20.2
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/
+    - assets/logo.jpg

@@ -162,10 +162,10 @@ http: ^1.2.2 # Consumo de API REST
 
 ## 👥 Equipe
 
-| Nome                      | Função        |
-| ------------------------- | ------------- |
-| Rodrigo de Azevedo Junior | Desenvolvedor |
-| Davi Sousa Cirilo         | Desenvolvedor |
+| Nome                      | Função                                                  |
+| ------------------------- | ------------------------------------------------------- |
+| Rodrigo de Azevedo Junior | Desenvolvedor, Integracao com FireBase, Editor do Video |
+| Davi Sousa Cirilo         | Desenvolvedor, Apresentador do Projeto                  |
 
 ---
 

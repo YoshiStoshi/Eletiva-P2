@@ -9,6 +9,7 @@ import 'Treinos.dart';
 import 'Agendamento.dart';
 import 'Planos.dart';
 import 'Pesquisa.dart';
+import 'Perfil.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -62,6 +63,17 @@ class _HomeState extends State<Home> {
           ],
         ),
         actions: [
+          // Perfil — editar dados privados
+          IconButton(
+            icon: Icon(Icons.person_outline, color: Colors.grey[400]),
+            tooltip: 'Meu Perfil',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const Perfil()),
+              );
+            },
+          ),
           // Sair — RF001
           IconButton(
             icon: Icon(Icons.logout, color: Colors.grey[400]),
@@ -109,14 +121,12 @@ class _HomeState extends State<Home> {
           ),
           NavigationDestination(
             icon: Icon(Icons.fitness_center_outlined, color: Colors.grey),
-            selectedIcon:
-                Icon(Icons.fitness_center, color: Color(0xFFE10600)),
+            selectedIcon: Icon(Icons.fitness_center, color: Color(0xFFE10600)),
             label: 'Treinos',
           ),
           NavigationDestination(
             icon: Icon(Icons.calendar_today_outlined, color: Colors.grey),
-            selectedIcon:
-                Icon(Icons.calendar_today, color: Color(0xFFE10600)),
+            selectedIcon: Icon(Icons.calendar_today, color: Color(0xFFE10600)),
             label: 'Agenda',
           ),
           NavigationDestination(

@@ -13,6 +13,7 @@ class AuthProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get name => _userData?['nome'] ?? _currentUser?.displayName ?? '';
   String? get email => _currentUser?.email;
+  String? get phone => _userData?['telefone'] ?? '';
 
   AuthProvider() {
     FirebaseService.authStateChanges.listen((user) {
@@ -24,7 +25,8 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> _loadUserData(String uid) async {
     try {
-      final doc = await FirebaseService.db.collection('usuarios').doc(uid).get();
+      final doc =
+          await FirebaseService.db.collection('usuarios').doc(uid).get();
       if (doc.exists) {
         _userData = doc.data();
         notifyListeners();
@@ -49,12 +51,18 @@ class AuthProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
       switch (e.code) {
-        case 'user-not-found': return 'Usuário não encontrado.';
-        case 'wrong-password': return 'Senha incorreta.';
-        case 'invalid-email': return 'E-mail inválido.';
-        case 'user-disabled': return 'Conta desativada.';
-        case 'invalid-credential': return 'Credenciais inválidas.';
-        default: return 'Erro ao fazer login: ${e.message}';
+        case 'user-not-found':
+          return 'Usuário não encontrado.';
+        case 'wrong-password':
+          return 'Senha incorreta.';
+        case 'invalid-email':
+          return 'E-mail inválido.';
+        case 'user-disabled':
+          return 'Conta desativada.';
+        case 'invalid-credential':
+          return 'Credenciais inválidas.';
+        default:
+          return 'Erro ao fazer login: ${e.message}';
       }
     }
   }
@@ -67,8 +75,11 @@ class AuthProvider extends ChangeNotifier {
     required String password,
     required String confirmPassword,
   }) async {
-    if (name.isEmpty || email.isEmpty || phone.isEmpty ||
-        password.isEmpty || confirmPassword.isEmpty) {
+    if (name.isEmpty ||
+        email.isEmpty ||
+        phone.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty) {
       return 'Preencha todos os campos obrigatórios.';
     }
     if (!_isValidEmail(email)) return 'E-mail inválido.';
@@ -82,7 +93,8 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
     try {
       final credential = await FirebaseService.auth
-          .createUserWithEmailAndPassword(email: email.trim(), password: password);
+          .createUserWithEmailAndPassword(
+              email: email.trim(), password: password);
 
       // RF002 — Salva campos adicionais na coleção "usuarios" do Firestore
       await FirebaseService.db
@@ -104,10 +116,14 @@ class AuthProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
       switch (e.code) {
-        case 'email-already-in-use': return 'E-mail já cadastrado.';
-        case 'weak-password': return 'Senha fraca.';
-        case 'invalid-email': return 'E-mail inválido.';
-        default: return 'Erro ao criar conta: ${e.message}';
+        case 'email-already-in-use':
+          return 'E-mail já cadastrado.';
+        case 'weak-password':
+          return 'Senha fraca.';
+        case 'invalid-email':
+          return 'E-mail inválido.';
+        default:
+          return 'Erro ao criar conta: ${e.message}';
       }
     }
   }
@@ -121,6 +137,48 @@ class AuthProvider extends ChangeNotifier {
       return null;
     } on FirebaseAuthException catch (e) {
       return 'Erro: ${e.message}';
+    }
+  }
+
+  Future<String?> updateProfile({
+    required String name,
+    required String phone,
+  }) async {
+    if (_currentUser == null) return 'Usuário não autenticado.';
+    if (name.isEmpty || phone.isEmpty) {
+      return 'Preencha todos os campos.';
+    }
+
+    _isLoading = true;
+    notifyListeners();
+    try {
+      final uid = _currentUser!.uid;
+      if (name.trim() != _currentUser!.displayName) {
+        await _currentUser!.updateDisplayName(name.trim());
+      }
+
+      await FirebaseService.db.collection('usuarios').doc(uid).update({
+        'nome': name.trim(),
+        'telefone': phone.trim(),
+      });
+
+      _userData = {
+        ...?_userData,
+        'nome': name.trim(),
+        'telefone': phone.trim(),
+      };
+      _currentUser = FirebaseService.auth.currentUser;
+      _isLoading = false;
+      notifyListeners();
+      return null;
+    } on FirebaseAuthException catch (e) {
+      _isLoading = false;
+      notifyListeners();
+      return 'Erro ao atualizar perfil: ${e.message}';
+    } catch (e) {
+      _isLoading = false;
+      notifyListeners();
+      return 'Erro ao atualizar perfil: $e';
     }
   }
 

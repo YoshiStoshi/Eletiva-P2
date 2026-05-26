@@ -15,6 +15,7 @@ class _ApiExerciciosState extends State<ApiExercicios> {
   bool _carregando = false;
   bool _carregado = false;
   String _termoBusca = '';
+  String? _erro;
   int _offset = 0;
   static const int _limite = 20;
 
@@ -36,24 +37,36 @@ class _ApiExerciciosState extends State<ApiExercicios> {
         _offset = 0;
         _exercicios = [];
         _carregado = false;
+        _erro = null;
       });
     }
 
-    setState(() => _carregando = true);
-
-    // RF007 — Consumo da API REST pública wger.de
-    final lista = await ApiService.fetchExercises(
-      query: _termoBusca,
-      offset: _offset,
-      limit: _limite,
-    );
-
     setState(() {
-      _exercicios.addAll(lista);
-      _offset += lista.length;
-      _carregando = false;
-      _carregado = true;
+      _carregando = true;
+      _erro = null;
     });
+
+    try {
+      final lista = await ApiService.fetchExercises(
+        query: _termoBusca,
+        offset: _offset,
+        limit: _limite,
+      );
+
+      setState(() {
+        _exercicios.addAll(lista);
+        _offset += lista.length;
+        _carregado = true;
+      });
+    } catch (e) {
+      setState(() {
+        _erro = e.toString();
+      });
+    } finally {
+      setState(() {
+        _carregando = false;
+      });
+    }
   }
 
   @override
@@ -103,8 +116,7 @@ class _ApiExerciciosState extends State<ApiExercicios> {
                     decoration: InputDecoration(
                       hintText: 'Buscar exercício...',
                       hintStyle: TextStyle(color: Colors.grey[600]),
-                      prefixIcon:
-                          Icon(Icons.search, color: Color(0xFFE10600)),
+                      prefixIcon: Icon(Icons.search, color: Color(0xFFE10600)),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(color: Colors.grey[700]!),
@@ -139,8 +151,7 @@ class _ApiExerciciosState extends State<ApiExercicios> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 14),
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   ),
                   child: Icon(Icons.search, color: Colors.white),
                 ),
@@ -177,58 +188,94 @@ class _ApiExerciciosState extends State<ApiExercicios> {
                       ],
                     ),
                   )
-                : _carregado && _exercicios.isEmpty
+                : _erro != null
                     ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.sports_gymnastics,
-                                color: Colors.grey[700], size: 60),
-                            SizedBox(height: 12),
-                            Text(
-                              'Nenhum exercício encontrado.',
-                              style: TextStyle(color: Colors.grey[500]),
-                            ),
-                          ],
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 24),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.error_outline,
+                                  color: Color(0xFFE10600), size: 60),
+                              SizedBox(height: 12),
+                              Text(
+                                'Não foi possível carregar os exercícios.',
+                                style: TextStyle(color: Colors.grey[300]),
+                                textAlign: TextAlign.center,
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                _erro!,
+                                style: TextStyle(
+                                  color: Colors.grey[500],
+                                  fontSize: 12,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              SizedBox(height: 16),
+                              ElevatedButton(
+                                onPressed: () => _carregar(resetar: true),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Color(0xFFE10600),
+                                ),
+                                child: Text('Tentar novamente'),
+                              ),
+                            ],
+                          ),
                         ),
                       )
-                    : ListView.builder(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        itemCount: _exercicios.length + 1,
-                        itemBuilder: (context, index) {
-                          if (index == _exercicios.length) {
-                            return Padding(
-                              padding: EdgeInsets.symmetric(vertical: 16),
-                              child: Center(
-                                child: _carregando
-                                    ? CircularProgressIndicator(
-                                        color: Color(0xFFE10600))
-                                    : OutlinedButton.icon(
-                                        onPressed: _carregar,
-                                        icon: Icon(Icons.expand_more,
-                                            color: Color(0xFFE10600)),
-                                        label: Text(
-                                          'Carregar mais',
-                                          style: TextStyle(
-                                              color: Color(0xFFE10600)),
-                                        ),
-                                        style: OutlinedButton.styleFrom(
-                                          side: BorderSide(
-                                              color: Color(0xFFE10600)),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                    : _carregado && _exercicios.isEmpty
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.sports_gymnastics,
+                                    color: Colors.grey[700], size: 60),
+                                SizedBox(height: 12),
+                                Text(
+                                  'Nenhum exercício encontrado.',
+                                  style: TextStyle(color: Colors.grey[500]),
+                                ),
+                              ],
+                            ),
+                          )
+                        : ListView.builder(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            itemCount: _exercicios.length + 1,
+                            itemBuilder: (context, index) {
+                              if (index == _exercicios.length) {
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 16),
+                                  child: Center(
+                                    child: _carregando
+                                        ? CircularProgressIndicator(
+                                            color: Color(0xFFE10600))
+                                        : OutlinedButton.icon(
+                                            onPressed: _carregar,
+                                            icon: Icon(Icons.expand_more,
+                                                color: Color(0xFFE10600)),
+                                            label: Text(
+                                              'Carregar mais',
+                                              style: TextStyle(
+                                                  color: Color(0xFFE10600)),
+                                            ),
+                                            style: OutlinedButton.styleFrom(
+                                              side: BorderSide(
+                                                  color: Color(0xFFE10600)),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                              ),
-                            );
-                          }
+                                  ),
+                                );
+                              }
 
-                          final ex = _exercicios[index];
-                          return _cardExercicio(ex);
-                        },
-                      ),
+                              final ex = _exercicios[index];
+                              return _cardExercicio(ex);
+                            },
+                          ),
           ),
         ],
       ),
@@ -245,8 +292,7 @@ class _ApiExerciciosState extends State<ApiExercicios> {
       ),
       child: ExpansionTile(
         tilePadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        childrenPadding:
-            EdgeInsets.fromLTRB(16, 0, 16, 16),
+        childrenPadding: EdgeInsets.fromLTRB(16, 0, 16, 16),
         leading: Container(
           width: 42,
           height: 42,
@@ -276,8 +322,7 @@ class _ApiExerciciosState extends State<ApiExercicios> {
         subtitle: ex.category.isNotEmpty
             ? Text(
                 ex.category,
-                style: TextStyle(
-                    color: Color(0xFFE10600), fontSize: 12),
+                style: TextStyle(color: Color(0xFFE10600), fontSize: 12),
               )
             : null,
         iconColor: Colors.grey[400],

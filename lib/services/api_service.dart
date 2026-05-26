@@ -20,13 +20,19 @@ class ExerciseModel {
   });
 
   factory ExerciseModel.fromJson(Map<String, dynamic> json) {
-    final translations = (json['translations'] as List?) ?? [];
-    final ptTranslation = translations.firstWhere(
-      (t) => t['language'] == 2,
-      orElse: () => translations.isNotEmpty ? translations.first : {},
-    );
+    final translations = (json['translations'] as List<dynamic>?) ?? [];
+    final ptTranslation = translations.cast<Map<String, dynamic>?>().firstWhere(
+          (t) => t != null && t['language'] == 2,
+          orElse: () => translations.isNotEmpty
+              ? translations.first as Map<String, dynamic>
+              : {},
+        );
 
-    String rawDesc = ptTranslation['description'] ?? json['description'] ?? '';
+    String rawDesc = '';
+    if (ptTranslation is Map<String, dynamic>) {
+      rawDesc = ptTranslation['description'] ?? '';
+    }
+    rawDesc = rawDesc.isEmpty ? json['description'] ?? '' : rawDesc;
     rawDesc = rawDesc
         .replaceAll(RegExp(r'<[^>]*>'), '')
         .replaceAll('&nbsp;', ' ')
@@ -35,19 +41,39 @@ class ExerciseModel {
         .replaceAll('&gt;', '>')
         .trim();
 
+    String name = '';
+    if (ptTranslation is Map<String, dynamic>) {
+      name = ptTranslation['name'] ?? '';
+    }
+    name = name.isEmpty ? json['name'] ?? 'Exercício' : name;
+
+    final categoryValue = json['category'];
+    String category = '';
+    if (categoryValue is Map<String, dynamic>) {
+      category = categoryValue['name'] ?? '';
+    } else if (categoryValue != null) {
+      category = categoryValue.toString();
+    }
+
+    String equipment = '';
+    final equipmentValue = json['equipment'];
+    if (equipmentValue is List) {
+      equipment = equipmentValue.map((e) => e.toString()).join(', ');
+    }
+
+    String muscles = '';
+    final musclesValue = json['muscles'];
+    if (musclesValue is List) {
+      muscles = musclesValue.map((m) => m.toString()).join(', ');
+    }
+
     return ExerciseModel(
       id: json['id'] ?? 0,
-      name: ptTranslation['name'] ?? json['name'] ?? 'Exercício',
+      name: name,
       description: rawDesc.isEmpty ? 'Sem descrição disponível.' : rawDesc,
-      category: json['category']?['name'] ?? '',
-      equipment: (json['equipment'] as List?)
-              ?.map((e) => e['name'] as String)
-              .join(', ') ??
-          '',
-      muscles: (json['muscles'] as List?)
-              ?.map((m) => m['name_en'] as String)
-              .join(', ') ??
-          '',
+      category: category,
+      equipment: equipment,
+      muscles: muscles,
     );
   }
 }
@@ -61,31 +87,27 @@ class ApiService {
     int offset = 0,
     int limit = 20,
   }) async {
-    try {
-      final params = {
-        'format': 'json',
-        'language': '2',
-        'limit': limit.toString(),
-        'offset': offset.toString(),
-        if (query.isNotEmpty) 'name': query,
-      };
+    final params = {
+      'format': 'json',
+      'language': '2',
+      'limit': limit.toString(),
+      'offset': offset.toString(),
+      if (query.isNotEmpty) 'name': query,
+    };
 
-      final uri =
-          Uri.parse('$_base/exercise/').replace(queryParameters: params);
-      final response =
-          await http.get(uri).timeout(const Duration(seconds: 15));
+    final uri = Uri.parse('$_base/exercise/').replace(queryParameters: params);
+    final response = await http.get(uri).timeout(const Duration(seconds: 15));
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        final results = data['results'] as List? ?? [];
-        return results
-            .map((e) => ExerciseModel.fromJson(e))
-            .where((e) => e.name.isNotEmpty)
-            .toList();
-      }
-      return [];
-    } catch (_) {
-      return [];
+    if (response.statusCode != 200) {
+      throw Exception(
+          'API retornou status ${response.statusCode}: ${response.body}');
     }
+
+    final data = jsonDecode(response.body);
+    final results = data['results'] as List? ?? [];
+    return results
+        .map((e) => ExerciseModel.fromJson(e))
+        .where((e) => e.name.isNotEmpty)
+        .toList();
   }
 }

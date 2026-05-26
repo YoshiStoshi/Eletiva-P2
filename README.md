@@ -24,18 +24,18 @@ O **Power House GYM** é um aplicativo mobile multiplataforma desenvolvido em **
 
 ## ✨ Funcionalidades
 
-| # | Tela | Descrição |
-|---|------|-----------|
-| 1 | 🔐 **Login** | Autenticação via Firebase Authentication com feedback de erro |
-| 2 | 📝 **Cadastro** | Registro com Firebase Auth + dados salvos no Firestore |
-| 3 | 🔑 **Recuperar senha** | Redefinição de senha por e-mail via Firebase |
-| 4 | 🏠 **Dashboard** | Resumo em tempo real com StreamBuilder |
-| 5 | 🏋️ **Treinos** | Catálogo com GridView e filtro por categoria (Firestore) |
-| 6 | 📅 **Agenda** | Grade semanal de aulas com inscrição/cancelamento (Firestore) |
-| 7 | 💳 **Planos** | Visualização e registro de matrícula no Firestore |
-| 8 | 🔍 **Pesquisa** | Busca case-insensitive com ordenação (RF006) |
-| 9 | 🌐 **API Exercícios** | Biblioteca via API pública wger.de (RF007) |
-| 10 | ℹ️ **Sobre** | Equipe, tecnologias e informações acadêmicas |
+| #   | Tela                   | Descrição                                                     |
+| --- | ---------------------- | ------------------------------------------------------------- |
+| 1   | 🔐 **Login**           | Autenticação via Firebase Authentication com feedback de erro |
+| 2   | 📝 **Cadastro**        | Registro com Firebase Auth + dados salvos no Firestore        |
+| 3   | 🔑 **Recuperar senha** | Redefinição de senha por e-mail via Firebase                  |
+| 4   | 🏠 **Dashboard**       | Resumo em tempo real com StreamBuilder                        |
+| 5   | 🏋️ **Treinos**         | Catálogo com GridView e filtro por categoria (Firestore)      |
+| 6   | 📅 **Agenda**          | Grade semanal de aulas com inscrição/cancelamento (Firestore) |
+| 7   | 💳 **Planos**          | Visualização e registro de matrícula no Firestore             |
+| 8   | 🔍 **Pesquisa**        | Busca case-insensitive com ordenação (RF006)                  |
+| 9   | 🌐 **API Exercícios**  | Biblioteca via API pública wger.de (RF007)                    |
+| 10  | ℹ️ **Sobre**           | Equipe, tecnologias e informações acadêmicas                  |
 
 ---
 
@@ -71,28 +71,29 @@ lib/
 
 ## ✅ Requisitos Atendidos
 
-| RF | Descrição | Status |
-|----|-----------|--------|
-| RF001 | Login + recuperação via Firebase Authentication | ✅ |
-| RF002 | Cadastro Firebase Auth + campos no Firestore | ✅ |
-| RF003 | Inserção em 4 coleções (usuarios, treinos, agendamentos, matriculas) | ✅ |
-| RF004 | Atualização em treinos, agendamentos e matriculas | ✅ |
-| RF005 | StreamBuilder + ListView/GridView em tempo real — 2 coleções | ✅ |
-| RF006 | Tela exclusiva de pesquisa com ordenação e case-insensitive | ✅ |
-| RF007 | Consumo de API REST pública (wger.de) | ✅ |
+| RF    | Descrição                                                            | Status |
+| ----- | -------------------------------------------------------------------- | ------ |
+| RF001 | Login + recuperação via Firebase Authentication                      | ✅     |
+| RF002 | Cadastro Firebase Auth + campos no Firestore                         | ✅     |
+| RF003 | Inserção em 4 coleções (usuarios, treinos, agendamentos, matriculas) | ✅     |
+| RF004 | Atualização em treinos, agendamentos e matriculas                    | ✅     |
+| RF005 | StreamBuilder + ListView/GridView em tempo real — 2 coleções         | ✅     |
+| RF006 | Tela exclusiva de pesquisa com ordenação e case-insensitive          | ✅     |
+| RF007 | Consumo de API REST pública (wger.de)                                | ✅     |
 
-| RNF | Descrição | Status |
-|-----|-----------|--------|
-| RNF1 | Flutter SDK + Dart | ✅ |
-| RNF2 | Integração Google Firebase | ✅ |
-| RNF3 | Firebase Hosting | ⚠️ Configurar manualmente |
-| RNF4 | Design intuitivo Material Design 3 | ✅ |
+| RNF  | Descrição                          | Status |
+| ---- | ---------------------------------- | ------ |
+| RNF1 | Flutter SDK + Dart                 | ✅     |
+| RNF2 | Integração Google Firebase         | ✅     |
+| RNF3 | Firebase Hosting                   | ✅     |
+| RNF4 | Design intuitivo Material Design 3 | ✅     |
 
 ---
 
 ## 🚀 Como Executar
 
 ### Pré-requisitos
+
 - Flutter SDK >= 3.0.0
 - Conta no [Firebase Console](https://console.firebase.google.com)
 
@@ -111,27 +112,6 @@ flutter build apk --release
 # 4. Build para Web (Firebase Hosting)
 flutter build web
 ```
-
----
-
-## 🔥 Configuração do Firebase (obrigatório)
-
-> O arquivo `firebase_options.dart` já está configurado com as credenciais do projeto.
-
-Caso precise reconfigurar:
-
-```bash
-# Instalar FlutterFire CLI
-dart pub global activate flutterfire_cli
-
-# Configurar projeto Firebase
-flutterfire configure
-```
-
-No **Firebase Console**, ative:
-- **Authentication** → método: E-mail/Senha
-- **Cloud Firestore** → modo de produção
-- **Hosting** → para publicação web
 
 ---
 
@@ -171,27 +151,27 @@ firebase deploy
 ## 📦 Dependências
 
 ```yaml
-firebase_core: ^4.9.0          # Core Firebase
-firebase_auth: ^6.5.1          # Autenticação
-cloud_firestore: ^6.4.1        # Banco de dados em tempo real
-provider: ^6.1.1               # Gerenciamento de estado
-http: ^1.2.2                   # Consumo de API REST
+firebase_core: ^4.9.0 # Core Firebase
+firebase_auth: ^6.5.1 # Autenticação
+cloud_firestore: ^6.4.1 # Banco de dados em tempo real
+provider: ^6.1.1 # Gerenciamento de estado
+http: ^1.2.2 # Consumo de API REST
 ```
 
 ---
 
 ## 👥 Equipe
 
-| Nome | Função |
-|------|--------|
-| Rodrigo de Azevedo Junior | Desenvolvedor Flutter |
-| Davi Sousa Cirilo | Desenvolvedor Flutter |
+| Nome                      | Função        |
+| ------------------------- | ------------- |
+| Rodrigo de Azevedo Junior | Desenvolvedor |
+| Davi Sousa Cirilo         | Desenvolvedor |
 
 ---
 
 ## 🏫 Informações Acadêmicas
 
-- **Disciplina:** Desenvolvimento Mobile
+- **Disciplina:** Dispositivos Moveis
 - **Instituição:** FATEC Ribeirão Preto
 - **Professor:** Prof. Rodrigo Plotze
 - **Semestre:** 4º Semestre / 2026

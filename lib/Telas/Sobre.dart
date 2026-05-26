@@ -37,8 +37,8 @@ class Sobre extends StatelessWidget {
                     color: Color(0xFFE10600),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Icon(Icons.fitness_center,
-                      color: Colors.white, size: 50),
+                  child:
+                      Icon(Icons.fitness_center, color: Colors.white, size: 50),
                 ),
               ),
             ),
@@ -60,12 +60,14 @@ class Sobre extends StatelessWidget {
 
             // Requisitos atendidos
             _secao('✅ Requisitos Atendidos'),
-            _itemRequisito('RF001', 'Login + recuperação via Firebase Authentication'),
-            _itemRequisito('RF002', 'Cadastro Firebase Auth + campos no Firestore'),
+            _itemRequisito(
+                'RF001', 'Login + recuperação via Firebase Authentication'),
+            _itemRequisito(
+                'RF002', 'Cadastro Firebase Auth + campos no Firestore'),
             _itemRequisito('RF003',
                 'Inserção em 4 coleções: usuarios, treinos, agendamentos, matriculas'),
-            _itemRequisito('RF004',
-                'Atualização em treinos, agendamentos e matriculas'),
+            _itemRequisito(
+                'RF004', 'Atualização em treinos, agendamentos e matriculas'),
             _itemRequisito('RF005',
                 'StreamBuilder + ListView/GridView em tempo real — 2+ coleções'),
             _itemRequisito('RF006',
@@ -76,22 +78,24 @@ class Sobre extends StatelessWidget {
             // Tecnologias
             _secao('🛠️ Tecnologias'),
             _itemTech(Icons.flutter_dash, 'Flutter SDK', Colors.blue),
-            _itemTech(Icons.local_fire_department, 'Firebase Auth', Colors.orange),
+            _itemTech(
+                Icons.local_fire_department, 'Firebase Auth', Colors.orange),
             _itemTech(Icons.storage, 'Cloud Firestore', Colors.orange),
             _itemTech(Icons.cloud, 'Firebase Hosting', Colors.orange),
             _itemTech(Icons.http, 'API REST (wger.de)', Colors.green),
-            _itemTech(Icons.account_tree, 'Provider (State Management)', Colors.purple),
+            _itemTech(Icons.account_tree, 'Provider (State Management)',
+                Colors.purple),
             SizedBox(height: 24),
 
             // Equipe
             _secao('👥 Equipe'),
-            _cardPessoa('Rodrigo de Azevedo Junior', 'Desenvolvedor Flutter'),
-            _cardPessoa('Davi Sousa Cirilo', 'Desenvolvedor Flutter'),
+            _cardPessoa('Rodrigo de Azevedo Junior', 'Desenvolvedor'),
+            _cardPessoa('Davi Sousa Cirilo', 'Desenvolvedor'),
             SizedBox(height: 24),
 
             // Informações acadêmicas
             _secao('🏫 Informações Acadêmicas'),
-            _infoAcademica('Disciplina', 'Desenvolvimento Mobile'),
+            _infoAcademica('Disciplina', 'Dispositivos Moveis'),
             _infoAcademica('Instituição', 'FATEC Ribeirão Preto'),
             _infoAcademica('Professor', 'Prof. Rodrigo Plotze'),
             _infoAcademica('Semestre', '4º Semestre / 2026'),
